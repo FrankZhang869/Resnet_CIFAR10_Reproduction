@@ -1,14 +1,14 @@
 # Deep Residual Learning for Image Recognition: CIFAR-10 Reproduction
 
-A PyTorch reproduction of the CIFAR-10 experiments from **Deep Residual Learning for Image Recognition** (He et al., 2016).
+A PyTorch reproduction of the CIFAR-10 experiments from Deep Residual Learning for Image Recognition (He et al., 2016).
 
-This project investigates the **degradation problem** in deep convolutional neural networks and demonstrates how **residual connections** enable the successful optimization of substantially deeper architectures.
+This project investigates the degradation problem in deep convolutional neural networks and demonstrates how residual connections enable the successful optimization of substantially deeper architectures.
 
 ---
 
 ## Motivation
 
-Increasing the depth of a neural network should theoretically improve representational power. However, the original ResNet paper observed that deeper **plain networks** often become harder to optimize, resulting in higher training error and diminishing performance gains.
+Increasing the depth of a neural network should theoretically improve representational power. However, the original ResNet paper observed that deeper plain networks often become harder to optimize, resulting in higher training error and diminishing performance gains.
 
 Residual Networks address this problem by introducing identity skip connections:
 
