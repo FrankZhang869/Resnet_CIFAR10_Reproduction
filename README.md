@@ -1,54 +1,56 @@
 # Deep Residual Learning for Image Recognition: CIFAR-10 Reproduction
 
-A PyTorch reproduction of the CIFAR-10 experiments from the paper **"Deep Residual Learning for Image Recognition"** by Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+A PyTorch reproduction of the CIFAR-10 experiments from **Deep Residual Learning for Image Recognition** (He et al., 2016).
 
-This project investigates the degradation problem in deep convolutional neural networks and examines how residual connections enable successful optimization of substantially deeper architectures.
+This project investigates the **degradation problem** in deep convolutional neural networks and demonstrates how **residual connections** enable the successful optimization of substantially deeper architectures.
 
 ---
 
-## Overview
+## Motivation
 
-Traditional deep neural networks do not always benefit from increased depth. The original ResNet paper demonstrated that simply stacking additional layers can make optimization more difficult, leading to higher training error and lower accuracy despite increased model capacity.
+Increasing the depth of a neural network should theoretically improve representational power. However, the original ResNet paper observed that deeper **plain networks** often become harder to optimize, resulting in higher training error and diminishing performance gains.
 
-To reproduce this phenomenon, I implemented and trained both plain convolutional networks and residual networks on the CIFAR-10 dataset.
+Residual Networks address this problem by introducing identity skip connections:
 
-### Implemented Models
+\[
+y = F(x) + x
+\]
 
-#### Plain Networks
+allowing the network to learn residual mappings rather than complete transformations.
+
+This project reproduces the CIFAR-10 experiments from the paper and compares optimization behavior between plain convolutional networks and residual networks.
+
+---
+
+## Implemented Architectures
+
+### Plain Networks
 - Plain20
 - Plain32
 - Plain44
 - Plain56
 
-#### Residual Networks
+### Residual Networks
 - ResNet20
 - ResNet32
 - ResNet44
 - ResNet56
 
-All models were trained using identical optimization settings to allow direct comparison between standard convolutional architectures and residual architectures.
+All architectures follow the CIFAR-10 design described in the paper:
 
----
-
-## Architecture
-
-The CIFAR-10 networks follow the architecture described in the original paper:
-
-- Initial 3×3 convolution layer
-- Three feature stages:
+- Initial 3×3 convolution
+- Three stages:
   - 16 channels
   - 32 channels
   - 64 channels
 - Global Average Pooling
-- Fully Connected Classification Layer
+- Fully Connected Classifier
 
 Network depth follows:
 
 \[
-\text{Depth} = 6n + 2
+\text{Depth}=6n+2
 \]
-
-where \(n\) represents the number of blocks in each stage.
 
 | Model | Depth |
 |---------|---------|
@@ -57,7 +59,7 @@ where \(n\) represents the number of blocks in each stage.
 | Plain44 / ResNet44 | 44 |
 | Plain56 / ResNet56 | 56 |
 
-The only architectural difference between corresponding Plain and ResNet models is the addition of identity skip connections.
+The only difference between corresponding models is the addition of residual skip connections.
 
 ---
 
@@ -78,55 +80,100 @@ Training was performed using PyTorch on an NVIDIA T4 GPU.
 
 ---
 
-## Results
+# Results
+
+## Validation Accuracy Comparison
+
+<table>
+<tr>
+<td align="center">
 
 ### Plain Networks
 
-#### Validation Accuracy
+<img src="images/plain_validation_accuracy.png" width="500">
 
-![Plain Validation Accuracy](images/plain_validation_accuracy.png)
+</td>
 
-#### Training Loss
+<td align="center">
 
-![Plain Training Loss](images/plain_training_loss.png)
+### ResNet Networks
 
-### Residual Networks
+<img src="images/resnet_validation_accuracy.png" width="500">
 
-#### Validation Accuracy
+</td>
+</tr>
+</table>
 
-*(Results currently being generated)*
+### Observations
 
-#### Training Loss
-
-*(Results currently being generated)*
-
----
-
-## Preliminary Observations
-
-The plain network experiments exhibit behavior consistent with the degradation problem discussed in the original ResNet paper.
-
-Key observations include:
-
-- Shallower networks converge substantially faster.
-- Increasing depth slows optimization.
-- Plain44 and Plain56 show noticeably noisier validation behavior.
-- Additional depth does not consistently improve validation accuracy.
-- Deeper plain networks maintain higher training loss throughout training.
-
-These results suggest that simply increasing network depth does not guarantee improved performance and may introduce optimization difficulties.
-
-The residual network experiments will be used to determine whether identity skip connections mitigate these issues and allow deeper models to train more effectively.
+- Shallower plain networks converge substantially faster.
+- Increasing depth in plain architectures slows optimization.
+- Plain44 and Plain56 exhibit noticeably noisier convergence behavior.
+- Residual networks achieve consistently higher validation accuracy across all depths.
+- Deeper ResNets continue improving while maintaining stable optimization.
 
 ---
 
-## Future Work
+## Training Loss Comparison
 
-- Complete ResNet training experiments
-- Compare model performance as a function of depth
-- Reproduce additional figures from the original paper
-- Analyze optimization behavior through training and validation curves
-- Evaluate the effectiveness of residual connections at increasing network depth
+<table>
+<tr>
+<td align="center">
+
+### Plain Networks
+
+<img src="images/plain_training_loss.png" width="500">
+
+</td>
+
+<td align="center">
+
+### ResNet Networks
+
+<img src="images/resnet_training_loss.png" width="500">
+
+</td>
+</tr>
+</table>
+
+### Observations
+
+- Plain networks maintain significantly higher training loss as depth increases.
+- Optimization becomes progressively more difficult in deeper plain architectures.
+- Residual networks converge more rapidly and achieve lower training loss.
+- The gap between shallow and deep models is substantially reduced when residual connections are introduced.
+- Identity skip connections improve gradient propagation and optimization stability.
+
+---
+
+## Key Findings
+
+### 1. Evidence of the Degradation Problem
+
+Increasing depth alone does not guarantee improved performance.
+
+The deeper plain architectures (44 and 56 layers) consistently train more slowly and exhibit worse optimization characteristics than their shallower counterparts.
+
+---
+
+### 2. Residual Connections Improve Optimization
+
+Across all depths, residual networks:
+
+- Converge faster
+- Reach lower training loss
+- Achieve higher validation accuracy
+- Exhibit smoother optimization behavior
+
+These findings are consistent with the conclusions presented in the original ResNet paper.
+
+---
+
+### 3. Deep Residual Networks Scale Better
+
+While deeper plain networks suffer from optimization difficulties, deeper residual networks remain trainable and continue improving as depth increases.
+
+This demonstrates the effectiveness of residual learning for training very deep convolutional neural networks.
 
 ---
 
@@ -134,7 +181,7 @@ The residual network experiments will be used to determine whether identity skip
 
 Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
 
-**Deep Residual Learning for Image Recognition.**
+**Deep Residual Learning for Image Recognition**
 
 Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2016.
 
